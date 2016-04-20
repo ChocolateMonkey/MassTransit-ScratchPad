@@ -14,4 +14,17 @@ namespace MassTransitService.Contracts
 
         string StreetName { get; set; }
     }
+
+    public interface CheckOrderStatus
+    {
+        string OrderId { get; }
+    }
+
+    public interface OrderStatusResult
+    {
+        string OrderId { get; }
+        DateTime Timestamp { get; }
+        short StatusCode { get; }
+        string StatusText { get; }
+    }
 }

@@ -13,7 +13,7 @@ namespace ConsoleApplication
 
         static void Main(string[] args)
         {
-            new RabbitMQDirect().BasicRabbitReceiver();
+            Sender();
         }
 
         
@@ -64,7 +64,7 @@ namespace ConsoleApplication
         static IBusControl ConfigureBus()
         {
             return Bus.Factory.CreateUsingRabbitMq(cfg =>
-            {
+            {                
                 cfg.Host(new Uri("rabbitmq://localhost"), h =>
                 {
                     h.Username("guest");
