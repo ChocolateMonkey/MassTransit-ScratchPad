@@ -1,11 +1,6 @@
 ﻿using MassTransit;
 using MassTransitService;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ConsoleApplication
 {
@@ -18,6 +13,32 @@ namespace ConsoleApplication
 
         static void Main(string[] args)
         {
+            new RabbitMQDirect().BasicRabbitReceiver();
+        }
+
+        
+
+        public static void Receiever()
+        {
+            var busControl = Bus.Factory.CreateUsingRabbitMq(cfg =>
+            {
+                var host = cfg.Host(new Uri("rabbitmq://localhost/"), h =>
+                {
+                    h.Username("guest");
+                    h.Password("guest");
+                });
+
+                string queueName = "hello";
+
+                cfg.ReceiveEndpoint(host, queueName, e =>
+                {
+                    e.Consumer<UpdateCustomerConsumer>();
+                });
+            });
+        }
+
+        public static void Sender()
+        { 
             var busControl = ConfigureBus();
             busControl.Start();
 
@@ -31,7 +52,7 @@ namespace ConsoleApplication
                     break;
 
                 busControl.Publish<ValueEntered>(new
-                {
+                {                    
                     Value = value
                 });
             }
